@@ -1,7 +1,22 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+fun main() {
+    println("Welcome to your banking system.")
+    println("What type of account would you like to create?")
+    println("1. Debit account")
+    println("2. Credit account")
+    println("3. Checking account")
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+    var accountType: String = ""
+    var userChoice: Int = 0
+
+    while (accountType == "") {
+        userChoice = (1..5).random()
+        println("The selected option is $userChoice")
+        when (userChoice) {
+            1 -> accountType = "debit"
+            2 -> accountType = "credit"
+            3 -> accountType = "checking"
+            else -> continue // repeat the loop when else condition is reached
+        }
+    }
+    println("You have created a $accountType account.")
 }
