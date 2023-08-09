@@ -10,35 +10,33 @@ fun main() {
 
     val money: Int = (0..1000).random() // generate random money
     var output: Int = 0 // temporary variable for testing printed output
-
-    // Always work for Debit and Checking account
-    var accountBalance: Int = (1..1000).random()
-
-    /*
-     This is for Credit account.
-     You need to make sure the account balance is always 0
-     or in negative numbers in order to "simulate" real
-     credit bank account. That's why i created separate code
-     for this one.
-
-     Use code below to simulate credit bank account balance,
-     especially for creditDeposit function.
-     */
-    //var accountBalance = -(0..1000).random()
+    var accountBalance = 0 // initialize account balance variable
 
     while (accountType == "") {
         println("Which option do you choose? (1, 2, or 3)")
         userChoice = (1..5).random()
         println("The selected option is $userChoice")
         when (userChoice) {
-            1 -> accountType = "debit"
-            2 -> accountType = "credit"
-            3 -> accountType = "checking"
+            1 -> {
+                accountType = "debit"
+                accountBalance = (0..1000).random()
+                println("You have created a $accountType account.")
+                println("Your current balance is $accountBalance dollars")
+            }
+            2 -> {
+                accountType = "credit"
+                accountBalance = (-1000..0).random() // credit bank account is always in 0 or in negative numbers.
+                println("You have created a $accountType account.")
+            }
+            3 -> {
+                accountType = "checking"
+                accountBalance = (0..1000).random()
+                println("You have created a $accountType account.")
+                println("Your current balance is $accountBalance dollars")
+            }
             else -> continue // repeat the loop when else condition is reached
         }
     }
-    println("You have created a $accountType account.")
-    println("Your current balance is $accountBalance dollars")
 
     // Function to withdraw money from Checking and credit bank accounts
     fun withdraw(amount: Int) : Int {
