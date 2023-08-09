@@ -1,18 +1,18 @@
 fun main() {
+    var accountType: String = "" // account type
+    var userChoice: Int = 0 // user choice
+
     println("Welcome to your banking system.")
     println("What type of account would you like to create?")
     println("1. Debit account")
     println("2. Credit account")
     println("3. Checking account")
 
-    var accountType: String = "" // account type
-    var userChoice: Int = 0 // user choice
-
     val money: Int = (0..1000).random() // generate random money
     var output: Int = 0 // temporary variable for testing printed output
 
     // Always work for Debit and Checking account
-    //var accountBalance: Int = (1..1000).random()
+    var accountBalance: Int = (1..1000).random()
 
     /*
      This is for Credit account.
@@ -24,9 +24,10 @@ fun main() {
      Use code below to simulate credit bank account balance,
      especially for creditDeposit function.
      */
-    var accountBalance = -(0..1000).random()
+    //var accountBalance = -(0..1000).random()
 
     while (accountType == "") {
+        println("Which option do you choose? (1, 2, or 3)")
         userChoice = (1..5).random()
         println("The selected option is $userChoice")
         when (userChoice) {
@@ -42,14 +43,11 @@ fun main() {
     // Function to withdraw money from Checking and credit bank accounts
     fun withdraw(amount: Int) : Int {
         accountBalance -= amount
-        println("You successfully withdrew $amount dollars")
-        println("Your current balance is $accountBalance dollars")
         return amount
     }
 
     // Function to withdraw money from debit
     fun debitWithdraw(amount: Int) : Int {
-        println("Amount of money you requested for withdraw = $amount dollars")
         if (accountBalance == 0) {
             println("Your current balance is $accountBalance. Withdraw cannot be processed")
             return accountBalance
@@ -66,14 +64,11 @@ fun main() {
     // Function to deposit for checking and debit account
     fun deposit(amount: Int) : Int {
         accountBalance += amount
-        println("You deposited $amount dollars to your account")
-        println("Your current account balance is $accountBalance dollars")
         return amount
     }
 
     // Function to deposit for credit account
     fun creditDeposit(amount: Int) : Int {
-        println("The amount of money you request to deposit is $amount dollars")
         if (accountBalance == 0) {
             println("You don't need to deposit anything in order to pay off the account since it has already been paid off")
             return accountBalance
@@ -93,6 +88,21 @@ fun main() {
         }
     }
 
+    fun transfer(mode: String) {
+        val transferAmount: Int
+        when(mode) {
+            "withdraw" -> {
+                transferAmount = if(accountType == "debit") debitWithdraw(money) else withdraw(money)
+                println("The amount you withdrew is ${transferAmount} dollars.")
+            }
+            "deposit" -> {
+                transferAmount = if (accountType == "credit") creditDeposit(money) else deposit(money)
+                println("The amount you deposited is $transferAmount dollars.")
+            }
+            else -> return
+        }
+    }
+
     // TEST : Withdraw money from Checking and credit bank accounts
     //withdraw(money)
 
@@ -109,5 +119,39 @@ fun main() {
      I made a separate accountBalance code where it's going to always generate
      in negative numbers to simulate a real credit bank account deposit.
      */
-    creditDeposit(money)
+    //creditDeposit(money)
+
+    println()
+    println("What would you like to do?")
+    println("1. Check bank account balance")
+    println("2. Withdraw money")
+    println("3. Deposit money")
+    println("4. Close the app")
+
+    var isSystemOpen = true
+    var option = 0
+
+    while(isSystemOpen) {
+        println("Which option do you choose? (1, 2, 3, or 4)")
+        option = (1..5).random()
+        println("The selection option is $option")
+        when(option) {
+            1 -> {
+                println("The current balance is $accountBalance dollars")
+            }
+            2 -> {
+                transfer("withdraw")
+                println("Your account balance now is $accountBalance dollars.")
+            }
+            3 -> {
+                transfer("deposit")
+                println("Your account balance now is $accountBalance dollars.")
+            }
+            4 -> {
+                isSystemOpen = false
+                println("The system is closed")
+            }
+            else -> continue
+        }
+    }
 }
