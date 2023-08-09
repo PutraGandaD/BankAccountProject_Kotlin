@@ -27,6 +27,7 @@ fun main() {
                 accountType = "credit"
                 accountBalance = (-1000..0).random() // credit bank account is always in 0 or in negative numbers.
                 println("You have created a $accountType account.")
+                println("Your payment due is $accountBalance dollars")
             }
             3 -> {
                 accountType = "checking"
@@ -40,7 +41,9 @@ fun main() {
 
     // Function to withdraw money from Checking and credit bank accounts
     fun withdraw(amount: Int) : Int {
+        println("The amount of money you requested for withdraw is $amount dollars")
         accountBalance -= amount
+        //println("Your account balance now is $accountBalance dollars")
         return amount
     }
 
@@ -51,6 +54,7 @@ fun main() {
             return accountBalance
         } else {
             if (amount > accountBalance) {
+                println("The amount of money you requested for withdraw is $amount dollars")
                 println("Your account balance is less than amount you requested for withdraw. Withdraw cannot be processed")
                 return 0
             } else {
@@ -61,12 +65,14 @@ fun main() {
 
     // Function to deposit for checking and debit account
     fun deposit(amount: Int) : Int {
+        println("The amount of money you requested for deposit is $amount")
         accountBalance += amount
         return amount
     }
 
     // Function to deposit for credit account
     fun creditDeposit(amount: Int) : Int {
+        println("The amount of money you requested for deposit is $amount")
         if (accountBalance == 0) {
             println("You don't need to deposit anything in order to pay off the account since it has already been paid off")
             return accountBalance
@@ -90,8 +96,18 @@ fun main() {
         val transferAmount: Int
         when(mode) {
             "withdraw" -> {
-                transferAmount = if(accountType == "debit") debitWithdraw(money) else withdraw(money)
-                println("The amount you withdrew is ${transferAmount} dollars.")
+                when(accountType) {
+                    "debit" -> debitWithdraw(money)
+                    "checking" -> {
+                        if (money > accountBalance) {
+                            println("Your account balance is less than amount you requested for withdraw. Withdraw cannot be processed")
+                        } else {
+                            transferAmount = withdraw(money)
+                            println("The amount you withdrew is ${transferAmount} dollars.")
+                        }
+                    }
+                    "credit" -> withdraw(money)
+                }
             }
             "deposit" -> {
                 transferAmount = if (accountType == "credit") creditDeposit(money) else deposit(money)
@@ -102,7 +118,8 @@ fun main() {
     }
 
     // TEST : Withdraw money from Checking and credit bank accounts
-    //withdraw(money)
+    //output = withdraw(money)
+    //println("You've successfully withdrew $output dollars from your debit card.")
 
     // TEST : Withdraw money from debit
     //output = debitWithdraw(money)
@@ -139,11 +156,19 @@ fun main() {
             }
             2 -> {
                 transfer("withdraw")
-                println("Your account balance now is $accountBalance dollars.")
+                if (accountType == "credit") {
+                    println("Your payment due now is $accountBalance dollars.")
+                } else {
+                    println("Your account balance now is $accountBalance dollars.")
+                }
             }
             3 -> {
                 transfer("deposit")
-                println("Your account balance now is $accountBalance dollars.")
+                if (accountType == "credit") {
+                    println("Your payment due now is $accountBalance dollars.")
+                } else {
+                    println("Your account balance now is $accountBalance dollars.")
+                }
             }
             4 -> {
                 isSystemOpen = false
